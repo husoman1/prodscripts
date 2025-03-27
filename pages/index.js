@@ -1,32 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabaseClient";
-import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
+import { useUser } from "@/context/UserContext";
 import Head from "next/head";
 
 export default function Login() {
   const router = useRouter();
-  useRedirectIfAuthenticated();
+  const { user } = useUser(); // Girişli kullanıcıyı yakala
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Giriş yapılmışsa direkt /'e yönlendir
+  useEffect(() => {
+    if (user) {
+      router.replace("/");
+    }
+  }, [user]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
-      setError(error.message);
+      setError("E-posta veya şifre hatalı.");
     } else {
-      router.push("/"); // başarılıysa anasayfaya
+      // login sonrası user context güncellenince useEffect tetiklenecek
     }
 
     setLoading(false);
