@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabaseClient";
-import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
+import { useUser } from "@/context/UserContext";
 
 export default function Register() {
-  useRedirectIfAuthenticated();
   const router = useRouter();
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && user) {
+      router.replace("/");
+    }
+  }, [user]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -1,13 +1,20 @@
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import useRedirectIfAuthenticated from "@/hooks/useRedirectIfAuthenticated";
+import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/context/UserContext";
 
 export default function ResetPassword() {
-  useRedirectIfAuthenticated();
   const router = useRouter();
+  const { user } = useUser();
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && user) {
+      router.replace("/");
+    }
+  }, [user]);
 
   const handleReset = async (e) => {
     e.preventDefault();
