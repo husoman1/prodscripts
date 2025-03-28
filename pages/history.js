@@ -25,7 +25,7 @@ export default function HistoryPage() {
       } else {
         setLogs(data);
         setPromptCount(data.length);
-        setSavedMinutes(data.length * 5); // her prompt ortalama 5dk kazandırdı diyelim
+        setSavedMinutes(data.length * 5); // her prompt ortalama 5dk kazandırdı
       }
 
       setLoading(false);
@@ -50,7 +50,6 @@ export default function HistoryPage() {
             </p>
           )}
 
-          {/* 🔥 İstatistik Kutusu */}
           {!loading && logs.length > 0 && (
             <div className="bg-white p-4 rounded-xl shadow mb-6 text-center">
               <p className="text-lg font-bold text-gray-800">
@@ -83,10 +82,14 @@ export default function HistoryPage() {
                   <span className="text-sm text-gray-600 block">Prompt:</span>
                   {log.prompt}
                 </p>
-                <p className="text-gray-900">
+                <p className="text-gray-900 mb-2">
                   <span className="text-sm text-gray-600 block">Output:</span>
                   {log.output}
                 </p>
+                <div className="text-sm text-gray-500 flex gap-4 mb-2">
+                  <span>🌐 Dil: {log.language?.toUpperCase()}</span>
+                  <span>📝 Stil: {log.style}</span>
+                </div>
                 <div className="flex justify-end gap-4 mt-3">
                   <button
                     onClick={() => navigator.clipboard.writeText(log.output)}

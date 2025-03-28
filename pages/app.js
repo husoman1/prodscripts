@@ -20,7 +20,6 @@ export default function Home() {
   const handleGenerate = async () => {
     const isDemoUsed = Cookies.get("prodscript_demo");
 
-    // 👥 DEMO kullanıcı kontrolleri
     if (!user && isDemoUsed) {
       alert("Demo hakkını zaten kullandın. Giriş yap veya kayıt ol.");
       return;
@@ -35,13 +34,11 @@ export default function Home() {
       return;
     }
 
-    // 💳 PREMIUM değilse ve limiti aştıysa reklam göster
     if (user && !isPremium && !canUse()) {
       setShowAdModal(true);
       return;
     }
 
-    // 🎯 Üretim
     setLoading(true);
     const res = await fetch("/api/generate", {
       method: "POST",
@@ -53,17 +50,34 @@ export default function Home() {
     setOutput(data.output);
     setLoading(false);
 
-    // 📦 LOG KAYDI (client üzerinden)
+    // ✅ DETAYLI LOG KAYDI
     if (user) {
-      const { error } = await supabase.from("logs").insert({
+      console.log("📦 LOG DATA:", {
         user_id: user.id,
+        user_email: user.email,
         prompt: input,
         output: data.output,
+        style,
+        language,
       });
-      if (error) console.error("🧨 Log kaydedilemedi:", error.message);
+
+      const { error } = await supabase.from("logs").insert({
+        user_id: user.id,
+        user_email: user.email,
+        prompt: input,
+        output: data.output,
+        style,
+        language,
+        created_at: new Date().toISOString(), // ekstra güvenlik
+      });
+
+      if (error) {
+        console.error("🧨 Log kaydedilemedi:", error.message);
+      } else {
+        console.log("✅ Log başarıyla kaydedildi.");
+      }
     }
 
-    // 🔢 Free kullanıcı için sayaç artır
     if (!isPremium) increaseUsage();
   };
 
