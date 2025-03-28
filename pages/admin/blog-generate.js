@@ -15,10 +15,7 @@ export default function BlogGeneratePage() {
   const [generated, setGenerated] = useState(false);
 
   useEffect(() => {
-    
-    if (!user) return;
-    console.error("user.user_metadata?.is_admin", user);
-    if (user && user.user_metadata?.is_admin !== true) {
+    if (!user || user.user_metadata?.is_admin !== true) {
       router.push("/"); // admin değilse anasayfaya at
     }
   }, [user]);

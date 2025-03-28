@@ -5,7 +5,7 @@ export default function Premium() {
           <h1 className="text-2xl font-bold mb-4">ProdScript Premium</h1>
           <p className="mb-4">Sınırsız üretim, reklamsız kullanım, ekstra modlar</p>
           <a
-            href="https://yourstore.lemonsqueezy.com/checkout/p/ürün-id"
+            href="https://scriber.lemonsqueezy.com/buy/b579a722-93cc-483c-94a1-9d318e6c090d"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-black text-white px-4 py-2 rounded-xl inline-block hover:bg-gray-800"
