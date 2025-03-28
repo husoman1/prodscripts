@@ -34,7 +34,12 @@ export default function Navbar({ remainingUsage }) {
                 )}
               </div>
             </div>
-
+            {user && (
+            <Link href="/history" className="text-sm text-blue-600 underline">
+                📄 Geçmişim
+            </Link>
+            )}
+     
             <button
               onClick={handleLogout}
               className="text-sm bg-black text-white px-3 py-1 rounded hover:bg-gray-800"
