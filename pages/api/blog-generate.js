@@ -64,7 +64,6 @@ export default async function handler(req, res) {
     return res.status(200).json({
       excerpt,
       content,
-      cover_image,
     });
   } catch (error) {
     console.error("🚨 Blog üretim hatası:", error);
