@@ -63,7 +63,6 @@ export default function Home() {
 
       const { error } = await supabase.from("logs").insert({
         user_id: user.id,
-        user_email: user.email,
         prompt: input,
         output: data.output,
         style,
