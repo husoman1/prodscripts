@@ -13,7 +13,11 @@ function AuthGuard({ children }) {
   useEffect(() => {
     const isProtected = protectedRoutes.includes(router.pathname);
 
-    if (!loading && isProtected && !user) {
+    // Giriş yapmayan ama demo hakkı olan kullanıcıya 1 seferlik erişim izni
+    const isDemoUsed = localStorage.getItem("prodscript_demo");
+    const allowDemo = !user && !isDemoUsed;
+
+    if (!loading && isProtected && !user && !allowDemo) {
       router.push("/login");
     }
   }, [user, loading, router]);
