@@ -1,6 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import crypto from "crypto";
-console.log("Webhook geldi:", eventName, email);
+
 export const config = {
   api: {
     bodyParser: false, // Ham body'yi yakalayabilmek için
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
   const event = JSON.parse(rawBody.toString());
   const eventName = event?.meta?.event_name;
   const email = event?.data?.customer_email;
-
+  console.log("Webhook geldi:", eventName, email);
   if (!email || !eventName) return res.status(400).json({ error: "Eksik veri" });
 
   const validEvents = ["subscription_created", "subscription_updated", "subscription_renewed"];
