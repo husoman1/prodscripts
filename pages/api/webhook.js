@@ -36,6 +36,8 @@ export default async function handler(req, res) {
   const event = JSON.parse(rawBody.toString());
   const eventName = event?.meta?.event_name;
   const email = event?.data?.customer_email;
+  console.log("🔥 FULL EVENT:", JSON.stringify(event, null, 2));
+
   console.log("Webhook geldi:", eventName, email);
   if (!email || !eventName) return res.status(400).json({ error: "Eksik veri" });
 
