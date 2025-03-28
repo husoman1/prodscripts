@@ -4,23 +4,22 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 
-function AuthGuard({ children }) {
-  const router = useRouter();
-  const { user, loading } = useUser();
+// Giriş gerektiren route'lar
+const protectedRoutes = ["/app", "/premium"];
 
-  const protectedRoutes = ["/", "/premium"];
+function AuthGuard({ children }) {
+  const { user, loading } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const isProtected = protectedRoutes.includes(router.pathname);
-
-    // Giriş yapmayan ama demo hakkı olan kullanıcıya 1 seferlik erişim izni
-    const isDemoUsed = localStorage.getItem("prodscript_demo");
+    const isDemoUsed = typeof window !== "undefined" && localStorage.getItem("prodscript_demo");
     const allowDemo = !user && !isDemoUsed;
 
     if (!loading && isProtected && !user && !allowDemo) {
       router.push("/login");
     }
-  }, [user, loading, router]);
+  }, [router.pathname, user, loading]);
 
   if (loading) return <div className="p-4 text-center">Yükleniyor...</div>;
 

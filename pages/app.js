@@ -3,7 +3,6 @@ import Head from "next/head";
 import { canUse, increaseUsage } from "@/lib/usageStore";
 import { useUser } from "@/context/UserContext";
 
-
 export default function Home() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -13,45 +12,44 @@ export default function Home() {
 
   const { user } = useUser();
 
-const handleGenerate = async () => {
-  if (!user) {
-    alert("Lütfen giriş yap.");
-    return;
-  }
+  const isPremium = user?.user_metadata?.is_premium === true;
 
-  // premium değilse günlük limit kontrolü yap
-  const isPremium = false; // TODO: Premium kontrolü eklenecek
+  const handleGenerate = async () => {
+    if (!user) {
+      alert("Lütfen giriş yap.");
+      return;
+    }
 
-  if (!isPremium && !canUse()) {
-    alert("Günlük kullanım limitine ulaştınız. Sınırsız kullanım için premium'a geçin.");
-    return;
-  }
+    if (!isPremium && !canUse()) {
+      alert("Günlük kullanım limitine ulaştınız. Sınırsız kullanım için Premium’a geçin.");
+      return;
+    }
 
-  setLoading(true);
-  const res = await fetch("/api/generate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ input, language, style }),
-  });
-  const data = await res.json();
-  setOutput(data.output);
-  increaseUsage();
-  setLoading(false);
-};
-
+    setLoading(true);
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input, language, style }),
+    });
+    const data = await res.json();
+    setOutput(data.output);
+    if (!isPremium) increaseUsage(); // sadece premium olmayanlarda usage art
+    setLoading(false);
+  };
 
   return (
     <>
       <Head>
         <title>ProdScript | AI Ürün Açıklaması Yazıcı</title>
       </Head>
+
       <main className="min-h-screen bg-gray-100 p-4">
-      <a
-  href="/premium"
-  className="block text-right text-blue-600 text-sm underline mb-2"
->
-  Premium’a Geç
-</a>
+        <a
+          href="/premium"
+          className="block text-right text-blue-600 text-sm underline mb-2"
+        >
+          Premium’a Geç
+        </a>
 
         <div className="max-w-xl mx-auto bg-white shadow-xl p-6 rounded-2xl">
           <h1 className="text-2xl font-bold mb-4 text-center">ProdScript</h1>
