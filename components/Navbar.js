@@ -32,18 +32,6 @@ export default function Navbar({ remainingUsage }) {
                   </span>
                 )}
               </div>
-
-              <div className="text-center mt-1">
-                {isPremium ? (
-                  <span className="text-green-600 font-semibold">
-                    👑 Premium Kullanıcı – Sınırsız Kullanım
-                  </span>
-                ) : (
-                  <span className="text-gray-500">
-                    🔄 Kalan Hakkın: {remainingUsage}
-                  </span>
-                )}
-              </div>
             </div>
 
             <button
