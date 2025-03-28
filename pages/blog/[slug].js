@@ -25,22 +25,33 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const decodedSlug = decodeURIComponent(params.slug);
 
-  const { data } = await supabase
+  console.log("📥 getStaticProps → gelen slug:", params.slug);
+  console.log("🔓 decode edilmiş slug:", decodedSlug);
+
+  const { data, error } = await supabase
     .from("blogs")
     .select("*")
     .eq("slug", decodedSlug)
     .eq("is_published", true)
     .single();
 
+  if (error) {
+    console.error("❌ Supabase sorgu hatası:", error.message);
+  }
+
   if (!data) {
+    console.warn("⚠️ Blog bulunamadı, slug:", decodedSlug);
     return { notFound: true };
   }
 
+  console.log("✅ Blog bulundu:", data.title);
+
   return {
     props: { blog: data },
-    revalidate: 60, // ISR
+    revalidate: 60,
   };
 }
+
 
 
 // ✅ 3. SAYFA
