@@ -49,11 +49,15 @@ export default async function handler(req, res) {
     return res.status(200).json({ message: "Geçerli fakat işlenmeyen event" });
   }
 
-  // ✅ Kullanıcıyı Supabase'ten bul (admin yetkisi ile)
-  const { data: user, error } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+  // 🔍 Kullanıcıyı Supabase RPC fonksiyonuyla bul
+  const { data, error: lookupError } = await supabaseAdmin.rpc("get_user_by_email", {
+    email_input: email,
+  });
 
-  if (!user || error) {
-    console.error("❌ Kullanıcı bulunamadı:", email, error?.message);
+  const user = data?.[0];
+
+  if (!user || lookupError) {
+    console.error("❌ Kullanıcı bulunamadı:", email, lookupError?.message);
     return res.status(404).json({ error: "Kullanıcı bulunamadı" });
   }
 
