@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import { canUse, increaseUsage } from "@/lib/usageStore";
 import { useUser } from "@/context/UserContext";
 import Cookies from "js-cookie";
 import QRModal from "@/components/QRModal";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -14,12 +15,12 @@ export default function Home() {
   const [showAdModal, setShowAdModal] = useState(false);
   const [showQR, setShowQR] = useState(false);
 
-  const { user } = useUser();
-  const isPremium = user?.user_metadata?.is_premium === true;
+  const { user, isPremium } = useUser();
 
   const handleGenerate = async () => {
     const isDemoUsed = Cookies.get("prodscript_demo");
 
+    // 👥 DEMO kullanıcı kontrolleri
     if (!user && isDemoUsed) {
       alert("Demo hakkını zaten kullandın. Giriş yap veya kayıt ol.");
       return;
@@ -34,35 +35,36 @@ export default function Home() {
       return;
     }
 
+    // 💳 PREMIUM değilse ve limiti aştıysa reklam göster
     if (user && !isPremium && !canUse()) {
       setShowAdModal(true);
       return;
     }
 
+    // 🎯 Üretim
     setLoading(true);
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ input, language, style }),
     });
+
     const data = await res.json();
     setOutput(data.output);
-
-    if (user) {
-      await fetch("/api/logOutput", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: user.id,
-          prompt: input,
-          output: data.output,
-        }),
-      });
-    }
-    
-
-    if (!isPremium) increaseUsage();
     setLoading(false);
+
+    // 📦 LOG KAYDI (client üzerinden)
+    if (user) {
+      const { error } = await supabase.from("logs").insert({
+        user_id: user.id,
+        prompt: input,
+        output: data.output,
+      });
+      if (error) console.error("🧨 Log kaydedilemedi:", error.message);
+    }
+
+    // 🔢 Free kullanıcı için sayaç artır
+    if (!isPremium) increaseUsage();
   };
 
   return (
@@ -145,7 +147,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Reklam Modalı */}
+      {/* 🧲 Reklam Modalı */}
       {showAdModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full text-center">
@@ -153,9 +155,8 @@ export default function Home() {
             <p className="mb-4">
               Premium’a geçerek sınırsız kullanımın keyfini çıkarabilir veya aşağıdaki fırsata göz atabilirsin:
             </p>
-            {/* İsteğe bağlı reklam/affiliate alanı */}
             <iframe
-              src="https://your-affiliate-link.com" // TODO: Burayı özelleştir
+              src="https://your-affiliate-link.com"
               className="w-full h-40 mb-4 border rounded"
             ></iframe>
             <a
@@ -174,10 +175,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* QR Modal (artık sadece showQR true ise açılır) */}
-      {showQR && (
-        <QRModal value={output} onClose={() => setShowQR(false)} />
-      )}
+      {/* 🔳 QR Modal */}
+      {showQR && <QRModal value={output} onClose={() => setShowQR(false)} />}
     </>
   );
 }
