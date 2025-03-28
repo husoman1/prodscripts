@@ -11,7 +11,7 @@ export async function getStaticPaths() {
     .eq("is_published", true);
 
   if (error) {
-    console.error("❌ getStaticPaths hata:", error.message);
+    console.error("❌ getStaticPaths hata::", error.message);
   }
 
   console.log("📄 getStaticPaths → dönen slug listesi:");
