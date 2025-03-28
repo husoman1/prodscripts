@@ -38,6 +38,12 @@ export default function HistoryPage() {
     <>
       <Head>
         <title>Üretim Geçmişi | ProdScript</title>
+        <meta name="description" content="GPT destekli AI ile saniyeler içinde profesyonel ürün açıklamaları oluştur." />
+        <meta property="og:title" content="ProdScript | AI Ürün Açıklaması" />
+        <meta property="og:description" content="GPT destekli AI ile saniyeler içinde profesyonel ürün açıklamaları oluştur." />
+        <meta property="og:image" content="https://prodscript.com/og-cover.jpg" />
+        <meta property="og:url" content="https://prodscript.com" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <main className="min-h-screen bg-gray-100 p-6">

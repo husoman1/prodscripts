@@ -79,7 +79,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.png" />
         <meta property="og:title" content="ProdScript ile Ürün Açıklaması Yaz" />
         <meta property="og:description" content="GPT destekli AI açıklama üretici ile zaman kazanın ve satışları artırın." />
-        <meta property="og:image" content="https://senindomainin.com/og.png" />
+        <meta property="og:image" content="https://prodscript.com/og.png" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 

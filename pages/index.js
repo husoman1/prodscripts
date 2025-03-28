@@ -49,7 +49,7 @@ export default function Landing() {
           content="GPT destekli AI açıklama üretici ile saniyeler içinde satış artıran metinler yaz. SEO uyumlu, yaratıcı ve çok dilli destek!"
         />
         <meta property="og:image" content="/og-cover.png" />
-        <meta property="og:url" content="https://senindomain.com/" />
+        <meta property="og:url" content="https://prodscript.com/" />
         <link rel="icon" href="/favicon.png" type="image/png" />
       </Head>
 
