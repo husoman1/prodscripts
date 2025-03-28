@@ -33,6 +33,7 @@ export const UserProvider = ({ children }) => {
   const refreshUser = async () => {
     const { data } = await supabase.auth.getUser();
     if (data?.user) {
+      console.error("🚫 user:", user);
       setUser(data.user);
       setIsPremium(data.user.user_metadata?.is_premium === true);
     }

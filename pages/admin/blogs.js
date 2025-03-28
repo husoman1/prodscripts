@@ -12,8 +12,7 @@ export default function AdminBlogsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
-    if (user && user.user_metadata?.is_admin !== true) {
+    if (!user || user.user_metadata?.is_admin !== true) {
         router.push("/"); // admin değilse anasayfaya at
       }
 
