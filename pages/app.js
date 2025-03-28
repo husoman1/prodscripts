@@ -3,6 +3,7 @@ import Head from "next/head";
 import { canUse, increaseUsage } from "@/lib/usageStore";
 import { useUser } from "@/context/UserContext";
 import Cookies from "js-cookie";
+import QRModal from "@/components/QRModal";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -10,6 +11,8 @@ export default function Home() {
   const [language, setLanguage] = useState("tr");
   const [style, setStyle] = useState("seo");
   const [loading, setLoading] = useState(false);
+  const [showAdModal, setShowAdModal] = useState(false);
+  const [showQR, setShowQR] = useState(false);
 
   const { user } = useUser();
   const isPremium = user?.user_metadata?.is_premium === true;
@@ -32,7 +35,7 @@ export default function Home() {
     }
 
     if (user && !isPremium && !canUse()) {
-      alert("Günlük kullanım limitine ulaştınız. Premium’a geçin.");
+      setShowAdModal(true); // ⚠️ Premium değilse modal göster
       return;
     }
 
@@ -104,12 +107,62 @@ export default function Home() {
           </button>
 
           {output && (
-            <div className="mt-6 bg-gray-50 p-4 rounded border">
+            <div className="mt-6 bg-gray-50 p-4 rounded border relative">
               <p>{output}</p>
+              <div className="flex justify-end gap-4 mt-4">
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(output);
+                    alert("Açıklama kopyalandı!");
+                  }}
+                  className="text-sm text-blue-600 underline"
+                >
+                  Kopyala
+                </button>
+
+                <button
+                  onClick={() => setShowQR(true)}
+                  className="text-sm text-purple-600 underline"
+                >
+                  QR ile Paylaş
+                </button>
+              </div>
             </div>
           )}
         </div>
       </main>
+
+      {/* Reklam Modalı */}
+      {showAdModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-xl max-w-sm w-full text-center">
+            <h2 className="text-xl font-bold mb-2">Üretim hakkın tükendi!</h2>
+            <p className="mb-4">
+              Premium’a geçerek sınırsız kullanımın keyfini çıkarabilir veya aşağıdaki fırsata göz atabilirsin:
+            </p>
+            {/* İsteğe bağlı reklam/affiliate alanı */}
+            <iframe
+              src="https://your-affiliate-link.com" // TODO: Burayı özelleştir
+              className="w-full h-40 mb-4 border rounded"
+            ></iframe>
+            <a
+              href="/premium"
+              className="inline-block bg-black text-white px-4 py-2 rounded-xl font-semibold hover:bg-gray-800"
+            >
+              Premium’a Geç
+            </a>
+            <button
+              className="block text-sm text-gray-500 mt-4 underline mx-auto"
+              onClick={() => setShowAdModal(false)}
+            >
+              Kapat
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* QR Modal */}
+      <QRModal value={output} onClose={() => setShowQR(false)} />
     </>
   );
 }
