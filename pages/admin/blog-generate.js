@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/router";
 
 export default function BlogGeneratePage() {
+  const { user } = useUser();
+  const router = useRouter();
+
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    if (!user.user_metadata?.is_admin) {
+      router.push("/");
+    }
+  }, [user]);
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -37,7 +49,7 @@ export default function BlogGeneratePage() {
       slug,
       excerpt,
       content,
-      status: "published",
+      is_published: true,
     });
 
     if (error) {
@@ -47,7 +59,6 @@ export default function BlogGeneratePage() {
       setTitle("");
       setExcerpt("");
       setContent("");
-      
       setGenerated(false);
     }
   };
