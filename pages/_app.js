@@ -3,8 +3,8 @@ import { UserProvider, useUser } from "@/context/UserContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import Cookies from "js-cookie"; // 👈 cookie için ekledik
 
-// Giriş gerektiren route'lar
 const protectedRoutes = ["/app", "/premium"];
 
 function AuthGuard({ children }) {
@@ -13,7 +13,7 @@ function AuthGuard({ children }) {
 
   useEffect(() => {
     const isProtected = protectedRoutes.includes(router.pathname);
-    const isDemoUsed = typeof window !== "undefined" && localStorage.getItem("prodscript_demo");
+    const isDemoUsed = Cookies.get("prodscript_demo"); // 👈 artık cookie üzerinden kontrol
     const allowDemo = !user && !isDemoUsed;
 
     if (!loading && isProtected && !user && !allowDemo) {

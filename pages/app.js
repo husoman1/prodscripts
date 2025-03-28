@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { canUse, increaseUsage } from "@/lib/usageStore";
 import { useUser } from "@/context/UserContext";
+import Cookies from "js-cookie";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -11,17 +12,27 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const { user } = useUser();
-
   const isPremium = user?.user_metadata?.is_premium === true;
 
   const handleGenerate = async () => {
-    if (!user) {
-      alert("Lütfen giriş yap.");
+    const isDemoUsed = Cookies.get("prodscript_demo");
+
+    if (!user && isDemoUsed) {
+      alert("Demo hakkını zaten kullandın. Giriş yap veya kayıt ol.");
       return;
     }
 
-    if (!isPremium && !canUse()) {
-      alert("Günlük kullanım limitine ulaştınız. Sınırsız kullanım için Premium’a geçin.");
+    if (!user && !isDemoUsed) {
+      Cookies.set("prodscript_demo", "used", { expires: 7 });
+    }
+
+    if (!user && !canUse()) {
+      alert("Giriş yapmadan günlük kullanım limitine ulaştın.");
+      return;
+    }
+
+    if (user && !isPremium && !canUse()) {
+      alert("Günlük kullanım limitine ulaştınız. Premium’a geçin.");
       return;
     }
 
@@ -33,7 +44,8 @@ export default function Home() {
     });
     const data = await res.json();
     setOutput(data.output);
-    if (!isPremium) increaseUsage(); // sadece premium olmayanlarda usage art
+
+    if (!isPremium) increaseUsage();
     setLoading(false);
   };
 
