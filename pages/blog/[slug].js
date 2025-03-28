@@ -16,15 +16,16 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: "blocking", // yeni içerik geldiğinde beklet
+    fallback: false, // Sadece derleme sırasında belirlenen yollar oluşturulacak
   };
 }
+
 
 // ✅ 2. SLUG DECODE EDİLİYOR!
 export async function getStaticProps({ params }) {
   const decodedSlug = decodeURIComponent(params.slug);
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("blogs")
     .select("*")
     .eq("slug", decodedSlug)
@@ -40,6 +41,7 @@ export async function getStaticProps({ params }) {
     revalidate: 60, // ISR
   };
 }
+
 
 // ✅ 3. SAYFA
 export default function BlogDetail({ blog }) {
