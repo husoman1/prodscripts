@@ -54,7 +54,7 @@ export default function Landing() {
       />
 
       {/* HERO */}
-      <section className="min-h-screen flex flex-col md:flex-row justify-center items-center text-center px-6 relative z-10 gap-12">
+      <section className="pt-24 md:pt-0 min-h-screen flex flex-col md:flex-row justify-center items-center text-center px-6 relative z-10 gap-12">
         <div className="md:w-1/2">
           <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
             Ürün Açıklaması mı? <br /> AI halleder.
