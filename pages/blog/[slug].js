@@ -5,10 +5,19 @@ import ReactMarkdown from "react-markdown";
 
 // ✅ 1. SLUG'LARI GETİR
 export async function getStaticPaths() {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("blogs")
     .select("slug")
     .eq("is_published", true);
+
+  if (error) {
+    console.error("❌ getStaticPaths hata:", error.message);
+  }
+
+  console.log("📄 getStaticPaths → dönen slug listesi:");
+  (data || []).forEach((b) => {
+    console.log("👉", b.slug);
+  });
 
   const paths = (data || []).map((blog) => ({
     params: { slug: blog.slug },
@@ -16,9 +25,10 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false, // Sadece derleme sırasında belirlenen yollar oluşturulacak
+    fallback: false, // sadece build sırasında statik oluşturulsun
   };
 }
+
 
 
 // ✅ 2. SLUG DECODE EDİLİYOR!
