@@ -12,7 +12,7 @@ export default function Navbar({ remainingUsage }) {
   };
 
   return (
-    <nav className="flex justify-between items-center px-6 py-4 bg-white shadow">
+    <nav className="sticky top-0 z-50 bg-white shadow px-6 py-4 flex justify-between items-center">
       <Link href="/" className="text-xl font-bold text-black">
         ProdScript
       </Link>

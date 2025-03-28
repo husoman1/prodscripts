@@ -5,18 +5,26 @@ export default function Document() {
   return (
     <Html lang="tr">
       <Head>
-        {/* 🌐 Global Meta Tags */}
+        {/* META */}
         <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
-        <meta name="description" content="AI destekli ürün açıklaması üreticisi. SEO uyumlu, sade ve eğlenceli tarzlarla satışlarını artır." />
+        <meta
+          name="description"
+          content="ProdScript ile saniyeler içinde AI destekli ürün açıklamaları üret. SEO uyumlu, eğlenceli ve sade metin tarzlarıyla satışlarını artır!"
+        />
+        <meta property="og:title" content="ProdScript | AI Ürün Açıklaması Yazıcı" />
+        <meta property="og:description" content="E-ticaret açıklamaları artık çok kolay. GPT destekli metinler ile hemen başla!" />
+        <meta property="og:image" content="/favicon.png" />
+        <meta property="og:url" content="https://prodscript.com" />
+        <meta property="og:type" content="website" />
 
-        {/* 🧠 Favicon */}
+        {/* FAVICON */}
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <meta property="og:image" content="/favicon.png" />
 
-        {/* 🏷️ Default Title (isteğe bağlı, sayfa override edebilir) */}
-        <title>ProdScript | AI Ürün Açıklama Sihirbazı</title>
+        {/* SEO Boost */}
+        <link rel="canonical" href="https://prodscript.com" />
       </Head>
       <body>
         <Main />
