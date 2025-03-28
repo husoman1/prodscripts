@@ -35,7 +35,7 @@ export default function Home() {
     }
 
     if (user && !isPremium && !canUse()) {
-      setShowAdModal(true); // ⚠️ Premium değilse modal göster
+      setShowAdModal(true);
       return;
     }
 
@@ -161,8 +161,10 @@ export default function Home() {
         </div>
       )}
 
-      {/* QR Modal */}
-      <QRModal value={output} onClose={() => setShowQR(false)} />
+      {/* QR Modal (artık sadece showQR true ise açılır) */}
+      {showQR && (
+        <QRModal value={output} onClose={() => setShowQR(false)} />
+      )}
     </>
   );
 }
