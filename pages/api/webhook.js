@@ -1,6 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import crypto from "crypto";
-
+console.log("Webhook geldi:", eventName, email);
 export const config = {
   api: {
     bodyParser: false, // Ham body'yi yakalayabilmek için
