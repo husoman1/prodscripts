@@ -1,55 +1,69 @@
-// pages/blogs/[slug].js
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { supabase } from "@/lib/supabaseClient";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-export default function BlogPost() {
-  const router = useRouter();
-  const { slug } = router.query;
-  const [post, setPost] = useState(null);
+export async function getServerSideProps({ params }) {
+  const { slug } = params;
 
-  useEffect(() => {
-    if (!slug) return;
+  const { data, error } = await supabase
+    .from("blogs")
+    .select("*")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single();
 
-    const fetchPost = async () => {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .eq("slug", slug)
-        .single();
-
-      if (!error) setPost(data);
+  if (!data || error) {
+    return {
+      notFound: true,
     };
+  }
 
-    fetchPost();
-  }, [slug]);
+  return {
+    props: {
+      blog: data,
+    },
+  };
+}
 
-  if (!post) return <p className="p-6">Yükleniyor...</p>;
+export default function BlogDetail({ blog }) {
+  const router = useRouter();
+
+  if (!blog) {
+    return <p className="text-center mt-20">Yükleniyor...</p>;
+  }
 
   return (
     <>
       <Head>
-        <title>{post.title} | ProdScript Blog</title>
-        <meta name="description" content={post.excerpt} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt} />
-        <meta property="og:image" content={post.cover_image} />
+        <title>{blog.title} | ProdScript Blog</title>
+        <meta name="description" content={blog.excerpt} />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.excerpt} />
+        <meta property="og:image" content={blog.cover_image} />
+        <meta property="og:url" content={`https://prodscript.com/blogs/${blog.slug}`} />
         <meta property="og:type" content="article" />
       </Head>
 
-      <main className="max-w-3xl mx-auto px-4 py-12">
-        <img
-          src={post.cover_image}
-          alt={post.title}
-          className="rounded-xl w-full mb-6"
-        />
-        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        <p className="text-gray-500 italic mb-6">{post.excerpt}</p>
-        <div
-          className="prose prose-lg max-w-none"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+      <main className="max-w-3xl mx-auto p-6 bg-white mt-10 rounded-xl shadow">
+        <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
+
+        {blog.cover_image && (
+          <img
+            src={blog.cover_image}
+            alt={blog.title}
+            className="w-full rounded-xl mb-6"
+          />
+        )}
+
+        <p className="text-gray-600 text-sm mb-4">
+          Yayınlanma: {new Date(blog.created_at).toLocaleDateString("tr-TR")}
+        </p>
+
+        <div className="prose max-w-none">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{blog.content}</ReactMarkdown>
+        </div>
       </main>
     </>
   );
