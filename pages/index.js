@@ -4,7 +4,7 @@ import { loadFull } from "tsparticles";
 import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
 import { motion } from "framer-motion";
-import Lottie from "lottie-react";
+import Lottie from "@/components/LottieOnlyClient";
 import aiAnimation from "@/public/animations/ai.json"; // Lottie animasyonu
 
 const mockPosts = [
