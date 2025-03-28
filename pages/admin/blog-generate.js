@@ -14,8 +14,12 @@ export default function BlogGeneratePage() {
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
 
+ 
   useEffect(() => {
+    console.error("🚫 user:", user);
     if (!user || user.user_metadata?.is_admin !== true) {
+    
+        console.error("🚫 in1?:");
       router.push("/"); // admin değilse anasayfaya at
     }
   }, [user]);
