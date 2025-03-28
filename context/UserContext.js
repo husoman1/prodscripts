@@ -5,43 +5,45 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
-    // İlk oturum kontrolü
+    // Oturum kontrolü
     supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user || null);
+      const currentUser = data.session?.user || null;
+      setUser(currentUser);
+      setIsPremium(currentUser?.user_metadata?.is_premium === true);
     });
 
-    // Auth state değişikliklerini dinle
+    // Auth değişiklik dinleyici
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user || null);
+      async (_event, session) => {
+        const currentUser = session?.user || null;
+        setUser(currentUser);
+        setIsPremium(currentUser?.user_metadata?.is_premium === true);
       }
     );
 
-    // Cleanup
     return () => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
 
+  // Refresh fonksiyonu (kullanabileceğin)
+  const refreshUser = async () => {
+    const { data } = await supabase.auth.getUser();
+    if (data?.user) {
+      setUser(data.user);
+      setIsPremium(data.user.user_metadata?.is_premium === true);
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user }}>
+    <UserContext.Provider value={{ user, isPremium, refreshUser }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-const refreshUser = async () => {
-  const { data, error } = await supabase.auth.getUser();
-  if (data?.user) {
-    setUser(data.user); // güncel metadata gelir
-  }
-};
-
-
-// Custom hook
 export const useUser = () => useContext(UserContext);
-
-// Default export ekliyoruz ki import sorunu olmasın
 export default UserContext;
