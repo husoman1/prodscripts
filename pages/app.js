@@ -48,6 +48,19 @@ export default function Home() {
     const data = await res.json();
     setOutput(data.output);
 
+    if (user) {
+      await fetch("/api/logOutput", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: user.id,
+          prompt: input,
+          output: data.output,
+        }),
+      });
+    }
+    
+
     if (!isPremium) increaseUsage();
     setLoading(false);
   };

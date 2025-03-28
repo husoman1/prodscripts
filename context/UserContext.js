@@ -32,6 +32,14 @@ export const UserProvider = ({ children }) => {
   );
 };
 
+const refreshUser = async () => {
+  const { data, error } = await supabase.auth.getUser();
+  if (data?.user) {
+    setUser(data.user); // güncel metadata gelir
+  }
+};
+
+
 // Custom hook
 export const useUser = () => useContext(UserContext);
 

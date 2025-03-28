@@ -31,6 +31,15 @@ export default function Navbar({ remainingUsage }) {
                   Bugün {remainingUsage} hakkın kaldı
                 </span>
               )}
+              {user && (
+                <p className="text-center text-sm text-gray-600 my-2">
+                    {isPremium ? (
+                    <span className="text-green-600 font-semibold">👑 Premium Kullanıcı – Sınırsız Kullanım</span>
+                    ) : (
+                    <span>Kalan Hakkın: {getRemainingUsage()}</span>
+                    )}
+                </p>
+                )}
             </span>
             <button
               onClick={handleLogout}
