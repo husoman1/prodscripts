@@ -87,6 +87,39 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* FEATURES */}
+      <section className="py-20 px-6 text-white bg-gradient-to-b from-black to-gray-900">
+        <h2 className="text-3xl font-bold text-center mb-12">✨ Özellikler</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {[
+            {
+              title: "⚡ Anında Üretim",
+              desc: "GPT destekli altyapı sayesinde açıklamanız 10 saniyede hazır.",
+            },
+            {
+              title: "🎯 Tarz Seçimi",
+              desc: "SEO, sade, eğlenceli gibi farklı metin tarzları oluşturun.",
+            },
+            {
+              title: "🌍 Çok Dilli Destek",
+              desc: "Türkçe ve İngilizce açıklama üretin, global pazarlara ulaşın.",
+            },
+          ].map((feature, index) => (
+            <motion.div
+              key={index}
+              className="bg-gray-800 rounded-xl p-6 shadow hover:scale-105 transition"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+              <p className="text-gray-300">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       {/* BLOG SLIDER */}
       <section className="py-20 px-6 bg-gray-900 text-white">
         <h2 className="text-3xl font-bold text-center mb-10">🧠 Son Yazılar</h2>
@@ -104,6 +137,20 @@ export default function Landing() {
             </motion.div>
           ))}
         </div>
+      </section>
+
+      {/* CTA BANNER */}
+      <section className="py-28 text-center bg-gradient-to-r from-purple-800 via-fuchsia-900 to-indigo-900 text-white">
+        <h2 className="text-3xl font-bold mb-4">🚀 Hazırsan Başlayalım</h2>
+        <p className="mb-8 text-lg text-gray-300">
+          Ücretsiz demo hakkını kullan veya direkt uygulamaya geç.
+        </p>
+        <Link
+          href="/app"
+          className="inline-block bg-white text-black px-8 py-3 rounded-full font-bold text-lg shadow-lg hover:animate-pulse transition"
+        >
+          Şimdi Dene
+        </Link>
       </section>
 
       {/* FOOTER */}
