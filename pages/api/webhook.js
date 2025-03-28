@@ -7,7 +7,7 @@ export const config = {
   },
 };
 
-// Raw body'yi almak için helper
+// 🔧 Raw body helper
 const buffer = async (readable) => {
   const chunks = [];
   for await (const chunk of readable) {
@@ -36,31 +36,34 @@ export default async function handler(req, res) {
   const event = JSON.parse(rawBody.toString());
   const eventName = event?.meta?.event_name;
   const email = event?.data?.attributes?.user_email;
+
+  console.log("🚀 Webhook tetiklendi:", eventName, email);
   console.log("🔥 FULL EVENT:", JSON.stringify(event, null, 2));
 
-  console.log("Webhook geldi:", eventName, email);
-  if (!email || !eventName) return res.status(400).json({ error: "Eksik veri" });
+  if (!email || !eventName) {
+    return res.status(400).json({ error: "Eksik veri" });
+  }
 
   const validEvents = ["subscription_created", "subscription_updated", "subscription_renewed"];
-  if (!validEvents.includes(eventName)) return res.status(200).json({ message: "Olay geçerli değil" });
+  if (!validEvents.includes(eventName)) {
+    return res.status(200).json({ message: "Geçerli fakat işlenmeyen event" });
+  }
 
-  const { data: user, error } = await supabaseAdmin
-    .from("users")
-    .select("id")
-    .eq("email", email)
-    .single();
+  // ✅ Kullanıcıyı Supabase'ten bul (admin yetkisi ile)
+  const { data: user, error } = await supabaseAdmin.auth.admin.getUserByEmail(email);
 
   if (!user || error) {
-    console.error("Kullanıcı bulunamadı", email, error?.message);
+    console.error("❌ Kullanıcı bulunamadı:", email, error?.message);
     return res.status(404).json({ error: "Kullanıcı bulunamadı" });
   }
 
+  // ✅ Premium flag'ini güncelle
   const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
     user_metadata: { is_premium: true },
   });
 
   if (updateError) {
-    console.error("Güncelleme hatası:", updateError.message);
+    console.error("❌ Güncelleme hatası:", updateError.message);
     return res.status(500).json({ error: "Güncelleme başarısız" });
   }
 
