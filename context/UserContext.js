@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
     // Oturum kontrolü
     supabase.auth.getSession().then(({ data }) => {
       const currentUser = data.session?.user || null;
-      console.error("🚫 user:", user);
+      console.error("🚫 user:", currentUser);
       setUser(currentUser);
       setIsPremium(currentUser?.user_metadata?.is_premium === true);
     });
@@ -20,7 +20,7 @@ export const UserProvider = ({ children }) => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         const currentUser = session?.user || null;
-        console.error("🚫 user:", user);
+        console.error("🚫 user:", currentUser);
         setUser(currentUser);
         setIsPremium(currentUser?.user_metadata?.is_premium === true);
       }
