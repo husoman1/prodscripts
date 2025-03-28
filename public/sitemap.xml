@@ -1,0 +1,26 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://www.prodscript.com/</loc>
+<priority>1.00</priority>
+</url>
+<url>
+<loc>https://www.prodscript.com/login</loc>
+<priority>0.80</priority>
+</url>
+<url>
+<loc>https://www.prodscript.com/register</loc>
+<priority>0.70</priority>
+</url>
+<url>
+<loc>https://www.prodscript.com/app</loc>
+<priority>0.90</priority>
+</url>
+<url>
+<loc>https://www.prodscript.com/premium</loc>
+<priority>0.60</priority>
+</url>
+<url>
+<loc>https://www.prodscript.com/reset-password</loc>
+<priority>0.50</priority>
+</url>
+</urlset>

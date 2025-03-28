@@ -50,24 +50,15 @@ export default function Home() {
     setOutput(data.output);
     setLoading(false);
 
-    // ✅ DETAYLI LOG KAYDI
     if (user) {
-      console.log("📦 LOG DATA:", {
+      const { error } = await supabase.from("logs").insert({
         user_id: user.id,
         user_email: user.email,
         prompt: input,
         output: data.output,
         style,
         language,
-      });
-
-      const { error } = await supabase.from("logs").insert({
-        user_id: user.id,
-        prompt: input,
-        output: data.output,
-        style,
-        language,
-        created_at: new Date().toISOString(), // ekstra güvenlik
+        created_at: new Date().toISOString(),
       });
 
       if (error) {
@@ -84,6 +75,12 @@ export default function Home() {
     <>
       <Head>
         <title>ProdScript | AI Ürün Açıklaması Yazıcı</title>
+        <meta name="description" content="AI ile saniyeler içinde etkileyici ürün açıklamaları oluştur." />
+        <link rel="icon" href="/favicon.png" />
+        <meta property="og:title" content="ProdScript ile Ürün Açıklaması Yaz" />
+        <meta property="og:description" content="GPT destekli AI açıklama üretici ile zaman kazanın ve satışları artırın." />
+        <meta property="og:image" content="https://senindomainin.com/og.png" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <main className="min-h-screen bg-gray-100 p-4">

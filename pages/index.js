@@ -1,4 +1,5 @@
 // pages/index.js
+import Head from "next/head";
 import Link from "next/link";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
@@ -34,6 +35,24 @@ export default function Landing() {
 
   return (
     <div className="relative overflow-hidden bg-black text-white">
+      {/* 🔥 HEAD SEO */}
+      <Head>
+        <title>ProdScript | AI Ürün Açıklaması Yazıcı</title>
+        <meta
+          name="description"
+          content="GPT destekli AI açıklama üretici ile saniyeler içinde satış artıran metinler yaz. SEO uyumlu, yaratıcı ve çok dilli destek!"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="ProdScript | AI Ürün Açıklaması Yazıcı" />
+        <meta
+          property="og:description"
+          content="GPT destekli AI açıklama üretici ile saniyeler içinde satış artıran metinler yaz. SEO uyumlu, yaratıcı ve çok dilli destek!"
+        />
+        <meta property="og:image" content="/og-cover.png" />
+        <meta property="og:url" content="https://senindomain.com/" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+      </Head>
+
       {/* PARTICLES */}
       <Particles
         id="tsparticles"
@@ -50,11 +69,10 @@ export default function Landing() {
           },
         }}
         className="absolute top-0 left-0 w-full h-full z-[-1] pointer-events-none"
-
       />
 
       {/* HERO */}
-      <section className="pt-24 md:pt-0 min-h-screen flex flex-col md:flex-row justify-center items-center text-center px-6 relative z-10 gap-12">
+      <section className="pt-[120px] md:pt-0 min-h-screen flex flex-col md:flex-row justify-center items-center text-center px-6 relative z-10 gap-12">
         <div className="md:w-1/2">
           <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
             Ürün Açıklaması mı? <br /> AI halleder.
@@ -64,15 +82,24 @@ export default function Landing() {
           </p>
           <div className="mt-8 flex justify-center gap-4 flex-wrap">
             {user ? (
-              <Link href="/app" className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg hover:scale-105 transition">
+              <Link
+                href="/app"
+                className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg hover:scale-105 transition"
+              >
                 🚀 Uygulamaya Git
               </Link>
             ) : (
               <>
-                <Link href="/register" className="bg-white text-black px-6 py-3 rounded-full text-lg font-bold shadow hover:bg-gray-200">
+                <Link
+                  href="/register"
+                  className="bg-white text-black px-6 py-3 rounded-full text-lg font-bold shadow hover:bg-gray-200"
+                >
                   Kayıt Ol
                 </Link>
-                <Link href="/app" className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg hover:scale-105 transition">
+                <Link
+                  href="/app"
+                  className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg hover:scale-105 transition"
+                >
                   🔥 Try Once for Free
                 </Link>
               </>
