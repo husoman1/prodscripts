@@ -1,105 +1,69 @@
-import { useState } from "react";
-import Head from "next/head";
-import { canUse, increaseUsage } from "@/lib/usageStore";
+import Link from "next/link";
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
+import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
 
-
-export default function Home() {
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [language, setLanguage] = useState("tr");
-  const [style, setStyle] = useState("seo");
-  const [loading, setLoading] = useState(false);
-
+export default function Landing() {
   const { user } = useUser();
 
-const handleGenerate = async () => {
-  if (!user) {
-    alert("Lütfen giriş yap.");
-    return;
-  }
-
-  // premium değilse günlük limit kontrolü yap
-  const isPremium = false; // TODO: Premium kontrolü eklenecek
-
-  if (!isPremium && !canUse()) {
-    alert("Günlük kullanım limitine ulaştınız. Sınırsız kullanım için premium'a geçin.");
-    return;
-  }
-
-  setLoading(true);
-  const res = await fetch("/api/generate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ input, language, style }),
-  });
-  const data = await res.json();
-  setOutput(data.output);
-  increaseUsage();
-  setLoading(false);
-};
-
+  const particlesInit = useCallback(async (engine) => {
+    await loadFull(engine);
+  }, []);
 
   return (
-    <>
-      <Head>
-        <title>ProdScript | AI Ürün Açıklaması Yazıcı</title>
-      </Head>
-      <main className="min-h-screen bg-gray-100 p-4">
-      <a
-  href="/premium"
-  className="block text-right text-blue-600 text-sm underline mb-2"
->
-  Premium’a Geç
-</a>
+    <div className="relative overflow-hidden bg-black text-white">
+      {/* BACKGROUND PARTICLE EFFECT */}
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={{
+          fullScreen: { enable: false },
+          particles: {
+            number: { value: 60 },
+            color: { value: "#9f7aea" },
+            shape: { type: "circle" },
+            opacity: { value: 0.3 },
+            size: { value: 3 },
+            move: { enable: true, speed: 1 },
+          },
+        }}
+        className="absolute top-0 left-0 w-full h-full z-0"
+      />
 
-        <div className="max-w-xl mx-auto bg-white shadow-xl p-6 rounded-2xl">
-          <h1 className="text-2xl font-bold mb-4 text-center">ProdScript</h1>
+      {/* HERO */}
+      <section className="min-h-screen flex flex-col justify-center items-center text-center px-6 relative z-10">
+        <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
+          Ürün Açıklaması mı? AI halleder.
+        </h1>
+        <p className="mt-6 text-xl max-w-2xl text-gray-300">
+          GPT destekli açıklama üretici ile mağazana saniyeler içinde profesyonel metinler oluştur.
+        </p>
 
-          <textarea
-            className="w-full p-3 border rounded mb-4"
-            rows={4}
-            placeholder="Ürünü kısaca tanıt (örnek: El yapımı sabun, lavanta kokulu, vegan)"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-
-          <div className="flex justify-between gap-4 mb-4">
-            <select
-              className="w-1/2 p-2 border rounded"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+        {/* DYNAMIC CTA BUTTON */}
+        <div className="mt-8 flex gap-4">
+          {user ? (
+            <Link
+              href="/app"
+              className="bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg hover:scale-105 transition"
             >
-              <option value="tr">Türkçe</option>
-              <option value="en">English</option>
-            </select>
-
-            <select
-              className="w-1/2 p-2 border rounded"
-              value={style}
-              onChange={(e) => setStyle(e.target.value)}
-            >
-              <option value="seo">SEO Uyumlu</option>
-              <option value="simple">Basit</option>
-              <option value="fun">Eğlenceli</option>
-            </select>
-          </div>
-
-          <button
-            className="w-full bg-black text-white p-3 rounded-xl font-semibold hover:bg-gray-800"
-            onClick={handleGenerate}
-            disabled={loading}
-          >
-            {loading ? "Üretiliyor..." : "Açıklama Üret"}
-          </button>
-
-          {output && (
-            <div className="mt-6 bg-gray-50 p-4 rounded border">
-              <p>{output}</p>
-            </div>
+              🚀 Uygulamaya Git
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/register"
+                className="bg-white text-black px-6 py-3 rounded-full text-lg font-bold shadow hover:bg-gray-200"
+              >
+                Kayıt Ol
+              </Link>
+              <Link
+                href="/app"
+                className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg hover:scale-105 transition"
+              >
+                🔥 Try Once for Free
+              </Link>
+            </>
           )}
         </div>
-      </main>
-    </>
-  );
-}
+      </section>
