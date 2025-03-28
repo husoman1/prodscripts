@@ -49,7 +49,8 @@ export default function Landing() {
             move: { enable: true, speed: 1 },
           },
         }}
-        className="absolute top-0 left-0 w-full h-full z-0"
+        className="absolute top-0 left-0 w-full h-full z-[-1] pointer-events-none"
+
       />
 
       {/* HERO */}
