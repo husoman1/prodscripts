@@ -3,6 +3,7 @@ import Head from "next/head";
 import { supabase } from "@/lib/supabaseClient";
 import ReactMarkdown from "react-markdown";
 
+// ✅ 1. SLUG'LARI GETİR
 export async function getStaticPaths() {
   const { data } = await supabase
     .from("blogs")
@@ -15,17 +16,18 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: "blocking", // yeni bloglar için beklet
+    fallback: "blocking", // yeni içerik geldiğinde beklet
   };
 }
 
+// ✅ 2. SLUG DECODE EDİLİYOR!
 export async function getStaticProps({ params }) {
-  const { slug } = params;
+  const decodedSlug = decodeURIComponent(params.slug);
 
   const { data, error } = await supabase
     .from("blogs")
     .select("*")
-    .eq("slug", slug)
+    .eq("slug", decodedSlug)
     .eq("is_published", true)
     .single();
 
@@ -35,10 +37,11 @@ export async function getStaticProps({ params }) {
 
   return {
     props: { blog: data },
-    revalidate: 60,
+    revalidate: 60, // ISR
   };
 }
 
+// ✅ 3. SAYFA
 export default function BlogDetail({ blog }) {
   const router = useRouter();
 

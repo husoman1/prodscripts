@@ -58,7 +58,7 @@ export default function BlogListPage({ blogs }) {
                 {blog.excerpt}
               </p>
               <Link
-                href={`/blogs/${blog.slug}`}
+                href={`/blogs/${encodeURIComponent(blog.slug)}`}
                 className="text-sm text-purple-600 underline font-semibold"
               >
                 Devamını Oku →
