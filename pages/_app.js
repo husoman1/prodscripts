@@ -2,12 +2,12 @@ import "@/styles/globals.css";
 import { UserProvider, useUser } from "@/context/UserContext";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import Navbar from "@/components/Navbar";
 
 function AuthGuard({ children }) {
   const router = useRouter();
   const { user, loading } = useUser();
 
-  // Giriş gerektiren sayfalar
   const protectedRoutes = ["/", "/premium"];
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function App({ Component, pageProps }) {
   return (
     <UserProvider>
       <AuthGuard>
+        <Navbar />
         <Component {...pageProps} />
       </AuthGuard>
     </UserProvider>
