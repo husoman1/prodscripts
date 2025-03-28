@@ -3,6 +3,25 @@ import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
+import { motion } from "framer-motion";
+
+const mockPosts = [
+  {
+    id: 1,
+    title: "SEO Uyumlu Ürün Açıklamaları Nasıl Yazılır?",
+    description: "GPT destekli metinlerle mağazanızı nasıl öne çıkarırsınız?",
+  },
+  {
+    id: 2,
+    title: "AI ile Satışları %40 Artırmanın Yolu",
+    description: "Yapay zekayı e-ticaret süreçlerinize entegre etmenin 3 yolu.",
+  },
+  {
+    id: 3,
+    title: "E-Ticaret için En İyi Prompt Örnekleri",
+    description: "AI'dan maksimum verim alabileceğiniz örnek prompt’lar.",
+  },
+];
 
 export default function Landing() {
   const { user } = useUser();
@@ -13,7 +32,7 @@ export default function Landing() {
 
   return (
     <div className="relative overflow-hidden bg-black text-white">
-      {/* BACKGROUND PARTICLE EFFECT */}
+      {/* PARTICLES BACKGROUND */}
       <Particles
         id="tsparticles"
         init={particlesInit}
@@ -40,7 +59,7 @@ export default function Landing() {
           GPT destekli açıklama üretici ile mağazana saniyeler içinde profesyonel metinler oluştur.
         </p>
 
-        {/* DYNAMIC CTA BUTTON */}
+        {/* CTA BUTTONS */}
         <div className="mt-8 flex gap-4">
           {user ? (
             <Link
@@ -67,6 +86,30 @@ export default function Landing() {
           )}
         </div>
       </section>
+
+      {/* BLOG SLIDER */}
+      <section className="py-20 px-6 bg-gray-900 text-white">
+        <h2 className="text-3xl font-bold text-center mb-10">🧠 Son Yazılar</h2>
+        <div className="overflow-x-auto flex gap-6 px-2">
+          {mockPosts.map((post) => (
+            <motion.div
+              key={post.id}
+              className="min-w-[300px] bg-gray-800 rounded-xl p-6 shadow hover:scale-105 transition"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-xl font-bold mb-2">{post.title}</h3>
+              <p className="text-gray-400 text-sm">{post.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="py-10 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} ProdScript • AI Destekli Ürün Açıklamaları
+      </footer>
     </div>
   );
 }
