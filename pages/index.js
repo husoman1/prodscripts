@@ -67,3 +67,6 @@ export default function Landing() {
           )}
         </div>
       </section>
+    </div>
+  );
+}
