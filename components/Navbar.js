@@ -2,7 +2,7 @@ import { useUser } from "@/context/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 
-export default function Navbar() {
+export default function Navbar({ remainingUsage }) {
   const { user, isPremium } = useUser();
 
   const handleLogout = async () => {
@@ -24,6 +24,11 @@ export default function Navbar() {
               {isPremium && (
                 <span className="ml-1 text-xs bg-yellow-400 text-black px-2 py-1 rounded">
                   Premium 👑
+                </span>
+              )}
+              {!isPremium && (
+                <span className="ml-2 text-xs text-gray-500">
+                  Bugün {remainingUsage} hakkın kaldı
                 </span>
               )}
             </span>
