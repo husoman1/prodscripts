@@ -231,7 +231,7 @@ export default function Landing() {
           AI e-ticaret dünyasındaki gelişmeleri ve özel ipuçlarını kaçırma. Mail listemize katıl, GPT’yi senin için çalıştıralım!
         </p>
         <form
-          action="https://huseyin-eraslan.kit.com/f56ffbbc1a" // TODO: BURAYA kendi ConvertKit URL'ini koy!
+          action="https://app.kit.com/forms/7851230/subscriptions" // TODO: BURAYA kendi ConvertKit URL'ini koy!
           method="POST"
           target="_blank"
           className="flex flex-col md:flex-row justify-center items-center gap-4 max-w-xl mx-auto"
