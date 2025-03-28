@@ -6,14 +6,14 @@ import Head from "next/head";
 
 export default function Login() {
   const router = useRouter();
-  const { user } = useUser(); // Girişli kullanıcıyı yakala
+  const { user } = useUser();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Giriş yapılmışsa direkt /'e yönlendir
+  // 👇 Giriş yapılmışsa direkt yönlendir
   useEffect(() => {
     if (user) {
       router.replace("/");
@@ -31,9 +31,7 @@ export default function Login() {
     });
 
     if (error) {
-      setError("E-posta veya şifre hatalı.");
-    } else {
-      // login sonrası user context güncellenince useEffect tetiklenecek
+      setError(error.message);
     }
 
     setLoading(false);
