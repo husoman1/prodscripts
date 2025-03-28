@@ -19,28 +19,33 @@ export default function Navbar({ remainingUsage }) {
       <div className="flex items-center gap-4">
         {user ? (
           <>
-            <span className="text-sm text-gray-600 flex items-center gap-2">
-              👋 {user.email}
-              {isPremium && (
-                <span className="ml-1 text-xs bg-yellow-400 text-black px-2 py-1 rounded">
-                  Premium 👑
-                </span>
-              )}
-              {!isPremium && (
-                <span className="ml-2 text-xs text-gray-500">
-                  Bugün {remainingUsage} hakkın kaldı
-                </span>
-              )}
-              {user && (
-                <p className="text-center text-sm text-gray-600 my-2">
-                    {isPremium ? (
-                    <span className="text-green-600 font-semibold">👑 Premium Kullanıcı – Sınırsız Kullanım</span>
-                    ) : (
-                    <span>Kalan Hakkın: {getRemainingUsage()}</span>
-                    )}
-                </p>
+            <div className="flex flex-col text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                👋 {user.email}
+                {isPremium ? (
+                  <span className="ml-1 text-xs bg-yellow-400 text-black px-2 py-1 rounded">
+                    Premium 👑
+                  </span>
+                ) : (
+                  <span className="ml-1 text-xs text-gray-500">
+                    Bugün {remainingUsage} hakkın kaldı
+                  </span>
                 )}
-            </span>
+              </div>
+
+              <div className="text-center mt-1">
+                {isPremium ? (
+                  <span className="text-green-600 font-semibold">
+                    👑 Premium Kullanıcı – Sınırsız Kullanım
+                  </span>
+                ) : (
+                  <span className="text-gray-500">
+                    🔄 Kalan Hakkın: {remainingUsage}
+                  </span>
+                )}
+              </div>
+            </div>
+
             <button
               onClick={handleLogout}
               className="text-sm bg-black text-white px-3 py-1 rounded hover:bg-gray-800"
