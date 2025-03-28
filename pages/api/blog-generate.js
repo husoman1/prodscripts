@@ -55,9 +55,9 @@ export default async function handler(req, res) {
 
     const excerpt = excerptRes?.choices?.[0]?.message?.content;
     const content = contentRes?.choices?.[0]?.message?.content;
-    const cover_image = imageRes?.data?.[0]?.url;
+    //const cover_image = imageRes?.data?.[0]?.url;
 
-    if (!excerpt || !content || !cover_image) {
+    if (!excerpt || !content) {
       throw new Error("İçerik üretimi tamamlanamadı.");
     }
 
