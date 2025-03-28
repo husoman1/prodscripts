@@ -5,24 +5,21 @@ import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/router";
 
 export default function BlogGeneratePage() {
-  const { user } = useUser();
+  const { user, isAdmin, loading } = useUser();
   const router = useRouter();
 
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
 
  
   useEffect(() => {
     console.error("🚫 user:", user);
-    if (!user || user.user_metadata?.is_admin !== true) {
-    
-        console.error("🚫 in1?:");
-      router.push("/"); // admin değilse anasayfaya at
-    }
-  }, [user]);
+    if (!loading && (!user || !isAdmin)) {
+        router.push("/"); // Admin değilse gönder
+      }
+  }, [user,isAdmin,loading]);
 
   const handleGenerate = async () => {
     setLoading(true);

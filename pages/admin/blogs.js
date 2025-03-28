@@ -6,13 +6,12 @@ import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/router";
 
 export default function AdminBlogsPage() {
-  const { user } = useUser();
+  const { user, isAdmin, loading } = useUser();
   const router = useRouter();
   const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || user.user_metadata?.is_admin !== true) {
+    if (!loading && (!user || !isAdmin)) {
         router.push("/"); // admin değilse anasayfaya at
       }
 
@@ -31,7 +30,7 @@ export default function AdminBlogsPage() {
     };
 
     fetchBlogs();
-  }, [user]);
+  }, [user, isAdmin, loading]);
 
   const handlePublish = async (id) => {
     const { error } = await supabase
