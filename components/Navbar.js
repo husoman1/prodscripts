@@ -1,6 +1,7 @@
 import { useUser } from "@/context/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
+import UserPopover from "@/components/UserPopover";
 
 export default function Navbar({ remainingUsage }) {
   const { user, isPremium } = useUser();
@@ -21,7 +22,7 @@ export default function Navbar({ remainingUsage }) {
           <>
             <div className="flex flex-col text-sm text-gray-600">
               <div className="flex items-center gap-2">
-                👋 {user.email}
+                👋 <UserPopover user={user} isPremium={isPremium} />
                 {isPremium ? (
                   <span className="ml-1 text-xs bg-yellow-400 text-black px-2 py-1 rounded">
                     Premium 👑
