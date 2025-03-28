@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import { useUser } from "@/context/UserContext";
 import { motion } from "framer-motion";
 import Lottie from "@/components/LottieOnlyClient";
-import aiAnimation from "@/animations/ai.json"; // src/animations içine koymuştuk
+import aiAnimation from "@/animations/ai.json";
 
 const mockPosts = [
   {
