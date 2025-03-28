@@ -1,53 +1,69 @@
-// pages/blogs/index.js
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import Head from "next/head";
 import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
 
-export default function BlogListPage() {
-  const [blogs, setBlogs] = useState([]);
+export async function getStaticProps() {
+  const { data, error } = await supabase
+    .from("blogs")
+    .select("title, slug, excerpt, cover_image, created_at")
+    .eq("is_published", true)
+    .order("created_at", { ascending: false });
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .order("created_at", { ascending: false });
+  return {
+    props: {
+      blogs: data || [],
+    },
+    revalidate: 60, // 1 dakikada bir güncelle
+  };
+}
 
-      if (!error) setBlogs(data);
-    };
-
-    fetchBlogs();
-  }, []);
-
+export default function BlogListPage({ blogs }) {
   return (
     <>
       <Head>
-        <title>Blog | ProdScript</title>
-        <meta name="description" content="AI destekli e-ticaret bloglarıyla satışlarını artır." />
+        <title>Bloglar | ProdScript</title>
+        <meta
+          name="description"
+          content="E-ticaret, ürün açıklamaları ve yapay zeka hakkında en güncel yazılar. ProdScript Blog!"
+        />
         <meta property="og:title" content="ProdScript Blog" />
-        <meta property="og:description" content="Yapay zeka ile satış artıran e-ticaret blogları." />
-        <meta property="og:image" content="https://prodscript.com/og-cover.png" />
+        <meta property="og:description" content="AI destekli e-ticaret içerikleri, SEO tüyoları ve daha fazlası." />
+        <meta property="og:image" content="/favicon.png" />
+        <meta property="og:url" content="https://prodscript.com/blogs" />
+        <meta property="og:type" content="website" />
       </Head>
 
-      <main className="max-w-5xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-center">🧠 AI Bloglar</h1>
+      <main className="max-w-5xl mx-auto px-4 py-12">
+        <h1 className="text-3xl font-bold text-center mb-10">🧠 Blog Yazıları</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {blogs.map((post) => (
-            <Link
-              key={post.id}
-              href={`/blogs/${post.slug}`}
-              className="block bg-white rounded-xl shadow hover:scale-105 transition p-4 border"
+        {blogs.length === 0 && (
+          <p className="text-center text-gray-500">Henüz içerik yok</p>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {blogs.map((blog) => (
+            <div
+              key={blog.slug}
+              className="bg-white shadow rounded-xl p-4 border hover:shadow-lg transition"
             >
-              <img
-                src={post.cover_image}
-                alt={post.title}
-                className="rounded-md w-full h-48 object-cover mb-4"
-              />
-              <h2 className="text-xl font-bold mb-2">{post.title}</h2>
-              <p className="text-gray-600 text-sm">{post.excerpt}</p>
-            </Link>
+              {blog.cover_image && (
+                <img
+                  src={blog.cover_image}
+                  alt={blog.title}
+                  className="rounded-xl h-48 object-cover w-full mb-4"
+                />
+              )}
+              <h2 className="text-xl font-bold mb-2">{blog.title}</h2>
+              <p className="text-gray-600 text-sm mb-4">
+                {blog.excerpt}
+              </p>
+              <Link
+                href={`/blogs/${blog.slug}`}
+                className="text-sm text-purple-600 underline font-semibold"
+              >
+                Devamını Oku →
+              </Link>
+            </div>
           ))}
         </div>
       </main>
