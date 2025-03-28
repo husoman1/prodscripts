@@ -16,8 +16,8 @@ export default function BlogGeneratePage() {
 
   useEffect(() => {
     if (!user) return;
-    if (!user.user_metadata?.is_admin) {
-      router.push("/");
+    if (user && user.user_metadata?.is_admin !== true) {
+      router.push("/"); // admin değilse anasayfaya at
     }
   }, [user]);
 

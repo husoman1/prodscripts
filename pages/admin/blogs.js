@@ -13,10 +13,9 @@ export default function AdminBlogsPage() {
 
   useEffect(() => {
     if (!user) return;
-    if (!user.user_metadata?.is_admin) {
-      router.push("/");
-      return;
-    }
+    if (user && user.user_metadata?.is_admin !== true) {
+        router.push("/"); // admin değilse anasayfaya at
+      }
 
     const fetchBlogs = async () => {
       const { data, error } = await supabase
