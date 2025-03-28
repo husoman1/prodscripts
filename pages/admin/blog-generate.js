@@ -6,7 +6,6 @@ export default function BlogGeneratePage() {
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
-  const [coverImage, setCoverImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
 
@@ -22,7 +21,6 @@ export default function BlogGeneratePage() {
     const data = await res.json();
     setExcerpt(data.excerpt);
     setContent(data.content);
-    setCoverImage(data.cover_image);
     setGenerated(true);
     setLoading(false);
   };
@@ -39,7 +37,6 @@ export default function BlogGeneratePage() {
       slug,
       excerpt,
       content,
-      cover_image: coverImage,
       status: "published",
     });
 
@@ -50,7 +47,7 @@ export default function BlogGeneratePage() {
       setTitle("");
       setExcerpt("");
       setContent("");
-      setCoverImage("");
+      
       setGenerated(false);
     }
   };
@@ -82,7 +79,6 @@ export default function BlogGeneratePage() {
 
         {generated && (
           <div className="mt-6 space-y-4">
-            <img src={coverImage} className="rounded-xl" alt="Cover" />
             <div className="bg-gray-100 p-4 rounded">
               <p className="text-sm text-gray-500">Özet:</p>
               <p>{excerpt}</p>
